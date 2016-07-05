@@ -1,40 +1,42 @@
-// requirements Create diner objects which represent a single diner.
-// Add dishes to a diner's meal
-// Total up the cost of all of the diners' meals
-// Add a fixed tax percentage to the total bill
-// Add a percentage tip to the total bill
-// Split the bill fairly among the diners
-// Each diner should pay the tax on their own food
-// Each diner should pay an equal share of the tip
-// If you choose to round the amounts, you may notice that the sum of the amounts does not equal the total bill amount anymore. Don't worry about that, or distribute the discrepancy in a fair way for an extra challenge.
-// Print out a total bill
-// Print a breakdown for what each diner owes
+var Diner = require('./diner');
 
-var diners = [];
+var names = ['bob', 'jane', 'dough'];
 
-var Diner = function(name, dishes) {
-  this.name = name;
-  this.dishes = dishes;
-  // this.tax
-
+var initializeDiners = function() {
+  var diners = [];
+  var dinerNum = randomNum(5) + 1;
+  for(var i = 0; i < dinerNum; i++) {
+    diners.push(createDiner());
+  }
+  return diners;
 };
 
-Diner.prototype.taxes = function() {
-
+var createDiner = function() {
+  var name = names[randomNum(names.length)];
+  var dishNum = randomNum(4) + 1;
+  var diner = new Diner(name);
+  for(var i = 0; i < dishNum; i++) {
+    diner.addDish(randomNum(30) + 1);
+  }
+  return diner;
 };
 
-Diner.prototype.tips = function() {
-
+var main = function() {
+  var diners = initializeDiners();
+  var total = diners.reduce(function(acc, diner) {
+    var total = diner.total();
+    return acc + total;
+  }, 0);
+  var basePortion = total/diners.length;
+  var dinerMessages = diners.map(function(diner) {
+    var taxes = diner.taxes(0.1);
+    return diner.name + ' owes: ' + (basePortion + taxes )
+  })
+  console.log(total, dinerMessages);
 };
 
-Diner.prototype.total = function() {
-
+var randomNum = function (max) {
+  return Math.floor(Math.random() * max);
 };
 
-Diner.prototype.print_bill = function() {
-
-};
-
-$(document).ready(function() {
-
-});
+main();
